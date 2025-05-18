@@ -2,8 +2,7 @@ name: Publish to chat
 
 on:
   schedule:
-    # every hour at :05
-    - cron:  '15 * * * *'
+    - cron:  '20 * * * *'
   workflow_dispatch:  # optional manual trigger
 
 jobs:
