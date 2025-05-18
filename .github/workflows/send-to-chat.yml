@@ -1,0 +1,35 @@
+name: Publish to chat
+
+on:
+  schedule:
+    # every hour at :05
+    - cron:  '10 * * * *'
+  workflow_dispatch:  # optional manual trigger
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install python-telegram-bot requests
+
+      - name: Run petition-bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python bot.py
+
+      - name: Commit updated state (if any)
+        run: |
+          git config --local user.name  "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add id.txt
+          git diff --quiet && echo "No changes to state" || git commit -m "Update last seen petition ID" && git push
