@@ -3,7 +3,7 @@ name: Publish to chat
 on:
   schedule:
     # every hour at :05
-    - cron:  '10 * * * *'
+    - cron:  '15 * * * *'
   workflow_dispatch:  # optional manual trigger
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: "3.13"
 
       - name: Install dependencies
         run: pip install python-telegram-bot requests
@@ -25,7 +25,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python bot.py
+        run: python fetch_latest_petitions.py
 
       - name: Commit updated state (if any)
         run: |
