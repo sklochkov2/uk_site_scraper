@@ -2,7 +2,7 @@ name: Publish to chat
 
 on:
   schedule:
-    - cron:  '20 * * * *'
+    - cron:  '26 * * * *'
 
 jobs:
   post:
