@@ -2,7 +2,8 @@ name: Publish to chat
 
 on:
   schedule:
-    - cron:  '26 * * * *'
+    - cron: '30 * * * *'
+  workflow_dispatch:
 
 jobs:
   post:
