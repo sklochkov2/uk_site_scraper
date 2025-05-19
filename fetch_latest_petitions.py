@@ -43,7 +43,7 @@ def fetch_petition_by_id(pid):
             break
         except requests.HTTPError:
             return None
-        except ex:
+        except:
             retries -= 1
             sleep(1)
     header = ""
@@ -94,10 +94,13 @@ def main():
     path = "./id.txt"
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
-    pets = fetch_petitions(path)
-    for pet in pets:
-        print("Petition %s\n%s\n%s\n" % (pet["id"], pet["h"], pet["b"]))
-    asyncio.run(send_messages(pets, token, chat_id))
+    try:
+        pets = fetch_petitions(path)
+        for pet in pets:
+            print("Petition %s\n%s\n%s\n" % (pet["id"], pet["h"], pet["b"]))
+        asyncio.run(send_messages(pets, token, chat_id))
+    except Exception as ex:
+        print('Failed to fetch petitions:', ex)
 
 
 if __name__ == "__main__":
