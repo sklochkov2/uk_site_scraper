@@ -78,7 +78,12 @@ def fetch_petitions(path):
 
 
 def format_petition(pet):
-    return "Petition %s\n\n%s\n\n%s" % (pet["id"], pet["h"], pet["b"])
+    pid = pet["id"]
+    header = telegram.helpers.escape_markdown(pet["h"], version=2)
+    body = telegram.helpers.escape_markdown(pet["b"], version=2)
+    link_text = telegram.helpers.escape_markdown(f"Petition {pid}", version=2)
+    link = f"https://petition.parliament.uk/petitions/{pid}"
+    return f"[{link_text}]({link})\n\n{header}\n\n{body}"
 
 
 async def send_messages(pets, token, chat_id):
@@ -87,8 +92,11 @@ async def send_messages(pets, token, chat_id):
         await bot.send_message(
             chat_id=chat_id,
             text=format_petition(pet),
-            parse_mode=telegram.constants.ParseMode.MARKDOWN,
+            parse_mode=telegram.constants.ParseMode.MARKDOWN_V2,
+            disable_web_page_preview=True,
         )
+        # Avoid getting into telegram rate limit
+        sleep(2)
 
 
 def main():
