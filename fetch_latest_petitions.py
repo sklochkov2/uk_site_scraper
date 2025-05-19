@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import asyncio
+import html
 import os
 import requests
 import telegram
@@ -29,7 +30,7 @@ def fetch_text_from_url(url):
 def fetch_value_from_line(line):
     parts = line.split('"')
     if len(parts) >= 4:
-        return parts[3]
+        return html.unescape(parts[3])
     return ""
 
 
@@ -100,7 +101,7 @@ def main():
             print("Petition %s\n%s\n%s\n" % (pet["id"], pet["h"], pet["b"]))
         asyncio.run(send_messages(pets, token, chat_id))
     except Exception as ex:
-        print('Failed to fetch petitions:', ex)
+        print("Failed to fetch petitions:", ex)
 
 
 if __name__ == "__main__":
